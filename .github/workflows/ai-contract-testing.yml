@@ -1,0 +1,23 @@
+name: AI Contract Testing
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize]
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [pact_changed]
+
+jobs:
+  contract-testing:
+    if: |
+      github.event_name == 'repository_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && 
+       (github.event.action == 'labeled' && github.event.label.name == 'contract-testing') ||
+       github.event.action == 'opened' ||
+       github.event.action == 'synchronize')
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/main.yml@main
+    with:
+      service_name: pact-provider-demo
+    secrets: inherit
