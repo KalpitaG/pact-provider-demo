@@ -34,3 +34,4 @@ router.get('/:id/profile', (req, res) => {
 });
 
 module.exports = router;
+module.exports._users = users;

@@ -115,3 +115,4 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+module.exports._items = items;
