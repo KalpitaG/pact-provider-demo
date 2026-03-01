@@ -7,6 +7,10 @@
 #   - Push to main → Verify contracts
 #   - Pactflow webhook (contract_requiring_verification_published) → Verify contracts
 #
+# provider_name resolution:
+#   - Webhook: use Pactflow's authoritative provider_name from the payload
+#   - Label/push: leave empty → central workflow reads .contract-testing.yml
+#
 # =============================================================================
 
 name: AI Contract Testing
@@ -14,10 +18,10 @@ name: AI Contract Testing
 on:
   pull_request:
     types: [labeled]
-  
+
   push:
     branches: [main]
-  
+
   repository_dispatch:
     types: [contract_requiring_verification_published]
 
@@ -27,15 +31,15 @@ jobs:
   # ===========================================================================
   verify-on-label:
     if: |
-      github.event_name == 'pull_request' && 
-      github.event.action == 'labeled' && 
+      github.event_name == 'pull_request' &&
+      github.event.action == 'labeled' &&
       github.event.label.name == 'contract-testing'
-    
+
     uses: KalpitaG/ai-contract-testing-demo/.github/workflows/provider-verification.yml@main
     with:
       repository: ${{ github.repository }}
       pr_number: ${{ github.event.pull_request.number }}
-      provider_name: ProviderService
+      provider_name: ''
     secrets: inherit
 
   # ===========================================================================
@@ -43,12 +47,12 @@ jobs:
   # ===========================================================================
   verify-on-push:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+
     uses: KalpitaG/ai-contract-testing-demo/.github/workflows/provider-verification.yml@main
     with:
       repository: ${{ github.repository }}
       pr_number: 0
-      provider_name: ProviderService
+      provider_name: ''
     secrets: inherit
 
   # ===========================================================================
@@ -56,11 +60,11 @@ jobs:
   # ===========================================================================
   verify-on-webhook:
     if: github.event_name == 'repository_dispatch' && github.event.action == 'contract_requiring_verification_published'
-    
+
     uses: KalpitaG/ai-contract-testing-demo/.github/workflows/provider-verification.yml@main
     with:
       repository: ${{ github.repository }}
       pr_number: 0
-      provider_name: ProviderService
+      provider_name: ${{ github.event.client_payload.provider_name }}
       pact_url: ${{ github.event.client_payload.pact_url }}
     secrets: inherit

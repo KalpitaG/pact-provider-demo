@@ -1,0 +1,7 @@
+pactflow_name: pact-provider-demo
+provider_to:
+  - pact-implementation
+server:
+  port: 3001
+  health_path: /health
+  start_command: npm start
