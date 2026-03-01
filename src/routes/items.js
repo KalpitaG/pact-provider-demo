@@ -23,6 +23,11 @@ router.get('/', (req, res) => {
   res.json({ items: result, total: result.length });
 });
 
+// GET /items/count - Get total item count
+router.get('/count', (req, res) => {
+  res.json({ count: items.length });
+});
+
 // GET /items/search - Search items
 router.get('/search', (req, res) => {
   const { q } = req.query;

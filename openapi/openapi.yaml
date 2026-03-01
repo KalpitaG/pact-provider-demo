@@ -93,6 +93,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /items/count:
+    get:
+      summary: Get total item count
+      operationId: getItemCount
+      tags: [Items]
+      responses:
+        "200":
+          description: Total number of items
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [count]
+                properties:
+                  count:
+                    type: integer
+
   /items/{id}:
     parameters:
       - name: id
