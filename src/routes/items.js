@@ -46,12 +46,14 @@ router.get('/search', (req, res) => {
 router.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const item = items.find(i => i.id === id);
-  
+
   if (!item) {
     return res.status(404).json({ error: 'Item not found', id });
   }
-  
-  res.json(item);
+
+  // Return item without category field (simulated breaking change)
+  const { category, ...itemWithoutCategory } = item;
+  res.json(itemWithoutCategory);
 });
 
 // POST /items - Create item
