@@ -86,15 +86,15 @@ describe('Provider Verification', () => {
         },
         'item 1 exists and can be deleted': () => {
           items.length = 0;
-          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 1, name: 'Widget', price: 12.99, category: 'Electronics', inStock: true });
         },
         'item 1 exists and can be replaced': () => {
           items.length = 0;
-          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 1, name: 'Widget', price: 12.99, category: 'Electronics', inStock: true });
         },
         'item 1 exists and can be updated': () => {
           items.length = 0;
-          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 1, name: 'Widget', price: 12.99, category: 'Electronics', inStock: true });
         },
         'items exist in the inventory for a specific category and stock status': () => {
           items.length = 0;
@@ -106,11 +106,11 @@ describe('Provider Verification', () => {
         },
         'user 1 exists': () => {
           users.length = 0;
-          users.push({ id: 1, username: 'testuser', role: 'user', email: 'test@example.com' });
+          users.push({ id: 1, username: 'testuser', email: 'test@example.com', role: 'user' });
         },
         'user 1 exists with full profile': () => {
           users.length = 0;
-          users.push({ id: 1, username: 'testuser', role: 'user', email: 'test@example.com' });
+          users.push({ id: 1, username: 'testuser', email: 'test@example.com', role: 'user' });
         },
         'user 999 does not exist': () => {
           users.length = 0;
