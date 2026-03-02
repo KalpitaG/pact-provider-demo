@@ -96,7 +96,7 @@ jobs:
   can-i-deploy:
     name: Can I Deploy?
     needs: [verify-on-push]
-    if: always() && needs.verify-on-push.result == 'success'
+    if: always() && needs.verify-on-push.result == 'success' && needs.verify-on-push.outputs.verification_passed == 'true'
     uses: KalpitaG/ai-contract-testing-demo/.github/workflows/can-i-deploy.yml@main
     with:
       pacticipant: pact-provider-demo
