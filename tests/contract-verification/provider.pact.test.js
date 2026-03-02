@@ -1,7 +1,5 @@
 const { Verifier } = require('@pact-foundation/pact');
 const app = require('../../src/index'); // Import the actual provider app
-
-// Import data arrays from route files
 const items = require('../../src/routes/items')._items;
 const users = require('../../src/routes/users')._users;
 const categories = require('../../src/routes/categories')._categories;
@@ -40,11 +38,13 @@ describe('Provider Verification', () => {
         'category with ID 1 exists and has items': () => {
           categories.length = 0;
           categories.push({ id: 1, name: 'Electronics', slug: 'electronics' });
-          // Note: categoryItems is NOT exported, so we can't directly modify it.
-          // The test expects a Laptop with id 1 and price 1200 to be returned
-          // Since we cannot directly modify categoryItems, we will have to rely on the default data
-          // or create a new endpoint to manage categoryItems via the API
-          // For now, we will just ensure the category exists.
+
+          // No direct access to categoryItems, so we can't set it up directly.
+          // The test case expects categoryItems[1] to have an item with id 1.
+          // Since we can't directly manipulate categoryItems, we'll rely on the
+          // existing data structure in the provider code.
+          // If the test fails because of missing items, consider adding an API
+          // to manipulate categoryItems or seed the data in a different way.
         },
         'item with ID 1 exists': () => {
           items.length = 0;
@@ -53,10 +53,6 @@ describe('Provider Verification', () => {
         'items exist in the inventory': () => {
           items.length = 0;
           items.push({ category: 'Electronics', id: 1, inStock: true, name: 'Widget', price: 9.99 });
-          items.push({ category: 'Electronics', id: 2, inStock: true, name: 'Gadget', price: 19.99 });
-          items.push({ category: 'Books', id: 3, inStock: false, name: 'Book', price: 5.99 });
-          items.push({ category: 'Clothing', id: 4, inStock: true, name: 'Shirt', price: 29.99 });
-          items.push({ category: 'Food', id: 5, inStock: false, name: 'Apple', price: 0.99 });
         },
         'items exist in the inventory for a specific category and in stock': () => {
           items.length = 0;
@@ -67,12 +63,10 @@ describe('Provider Verification', () => {
           items.push({ category: 'Electronics', id: 1, inStock: true, name: 'Widget', price: 9.99 });
         },
         'the categories API is available for creation': () => {
-          // No setup needed, API is always available
-          categories.length = 0; // Clear existing categories
+          categories.length = 0;
         },
         'the items API is available for creation': () => {
-          // No setup needed, API is always available
-          items.length = 0; // Clear existing items
+          items.length = 0;
         },
         'user with ID 1 exists': () => {
           users.length = 0;
@@ -84,7 +78,6 @@ describe('Provider Verification', () => {
       },
     };
 
-    // CRITICAL: PACT_URL vs broker source
     if (process.env.PACT_URL) {
       opts.pactUrls = [process.env.PACT_URL];
     } else {
