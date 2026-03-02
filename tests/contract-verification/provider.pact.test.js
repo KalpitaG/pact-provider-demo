@@ -84,11 +84,11 @@ describe('Provider Verification', () => {
         },
         'item 1 exists and can be replaced': () => {
           items.length = 0;
-          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 1, name: 'Widget', price: 10.99, category: 'Electronics', inStock: true });
         },
         'item 1 exists and can be updated': () => {
           items.length = 0;
-          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 1, name: 'Widget', price: 10.99, category: 'Electronics', inStock: true });
         },
         'items exist in the inventory for a specific category and stock status': () => {
           items.length = 0;
