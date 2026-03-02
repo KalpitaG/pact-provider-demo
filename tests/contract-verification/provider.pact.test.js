@@ -29,38 +29,35 @@ describe('Provider Verification', () => {
       stateHandlers: {
         'categories exist in the store': () => {
           categories.length = 0;
-          categories.push({ id: 1, name: 'Electronics', slug: 'electronics' });
+          categories.push({ id: 1, name: 'Electronics', slug: 'electronics', itemCount: 15 });
         },
         'category with ID 1 exists': () => {
           categories.length = 0;
-          categories.push({ id: 1, name: 'Electronics', slug: 'electronics' });
+          categories.push({ id: 1, name: 'Electronics', slug: 'electronics', itemCount: 15 });
         },
         'category with ID 1 exists and has items': () => {
           categories.length = 0;
-          categories.push({ id: 1, name: 'Electronics', slug: 'electronics' });
-
-          // No direct access to categoryItems, so we can't set it up directly.
-          // The test case expects categoryItems[1] to have an item with id 1.
-          // Since we can't directly manipulate categoryItems, we'll rely on the
-          // existing data structure in the provider code.
-          // If the test fails because of missing items, consider adding an API
-          // to manipulate categoryItems or seed the data in a different way.
+          categories.push({ id: 1, name: 'Electronics', slug: 'electronics', itemCount: 15 });
         },
         'item with ID 1 exists': () => {
           items.length = 0;
-          items.push({ category: 'Electronics', id: 1, inStock: true, name: 'Widget', price: 9.99 });
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
         },
         'items exist in the inventory': () => {
           items.length = 0;
-          items.push({ category: 'Electronics', id: 1, inStock: true, name: 'Widget', price: 9.99 });
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+          items.push({ id: 2, name: 'Gadget', price: 19.99, category: 'Electronics', inStock: true });
+          items.push({ id: 3, name: 'Thing', price: 5.49, category: 'Food', inStock: false });
+          items.push({ id: 4, name: 'Doodad', price: 24.99, category: 'Clothing', inStock: true });
+          items.push({ id: 5, name: 'Whatchamacallit', price: 12.99, category: 'Home Goods', inStock: true });
         },
         'items exist in the inventory for a specific category and in stock': () => {
           items.length = 0;
-          items.push({ category: 'Electronics', id: 2, inStock: true, name: 'Gadget', price: 19.99 });
+          items.push({ id: 2, name: 'Gadget', price: 19.99, category: 'Electronics', inStock: true });
         },
         'items exist matching the search query': () => {
           items.length = 0;
-          items.push({ category: 'Electronics', id: 1, inStock: true, name: 'Widget', price: 9.99 });
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
         },
         'the categories API is available for creation': () => {
           categories.length = 0;
@@ -70,7 +67,7 @@ describe('Provider Verification', () => {
         },
         'user with ID 1 exists': () => {
           users.length = 0;
-          users.push({ email: 'test@example.com', id: 1, role: 'user', username: 'testuser' });
+          users.push({ id: 1, username: 'testuser', email: 'test@example.com', role: 'user' });
         },
         'user with ID 999 does not exist': () => {
           users.length = 0;
@@ -81,8 +78,8 @@ describe('Provider Verification', () => {
     if (process.env.PACT_URL) {
       opts.pactUrls = [process.env.PACT_URL];
     } else {
-      opts.pactBrokerUrl = process.env.PACTFLOW_BASE_URL || process.env.PACT_BROKER_BASE_URL;
-      opts.pactBrokerToken = process.env.PACTFLOW_TOKEN || process.env.PACT_BROKER_TOKEN;
+      opts.pactBrokerUrl = process.env.PACT_BROKER_BASE_URL;
+      opts.pactBrokerToken = process.env.PACT_BROKER_TOKEN;
       opts.consumerVersionSelectors = [
         { mainBranch: true },
         { deployedOrReleased: true },
