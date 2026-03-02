@@ -6,6 +6,7 @@
 #   - Label 'contract-testing' added to PR → Verify contracts
 #   - Push to main → Verify contracts
 #   - Pactflow webhook (contract_requiring_verification_published) → Verify contracts
+#   - Comment 'ai-revise: <feedback>' on handler PR → Revise handlers
 #
 # provider_name resolution:
 #   - Webhook: use Pactflow's authoritative provider_name from the payload
@@ -24,6 +25,9 @@ on:
 
   repository_dispatch:
     types: [contract_requiring_verification_published]
+
+  issue_comment:
+    types: [created]
 
 jobs:
   # ===========================================================================
@@ -67,4 +71,21 @@ jobs:
       pr_number: 0
       provider_name: ${{ github.event.client_payload.provider_name }}
       pact_url: ${{ github.event.client_payload.pact_url }}
+    secrets: inherit
+
+  # ===========================================================================
+  # Trigger: Developer comments 'ai-revise: <feedback>' on handler PR
+  # ===========================================================================
+  revise-on-comment:
+    if: |
+      github.event_name == 'issue_comment' &&
+      github.event.action == 'created' &&
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, 'ai-revise:')
+
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/provider-revision.yml@main
+    with:
+      repository: ${{ github.repository }}
+      handler_pr_number: ${{ github.event.issue.number }}
+      comment_body: ${{ github.event.comment.body }}
     secrets: inherit
