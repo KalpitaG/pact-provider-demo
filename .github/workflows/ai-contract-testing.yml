@@ -88,6 +88,7 @@ jobs:
       repository: ${{ github.repository }}
       handler_pr_number: ${{ github.event.issue.number }}
       comment_body: ${{ github.event.comment.body }}
+      comment_id: ${{ github.event.comment.id }}
     secrets: inherit
 
   # ===========================================================================
