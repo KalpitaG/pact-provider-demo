@@ -89,3 +89,28 @@ jobs:
       handler_pr_number: ${{ github.event.issue.number }}
       comment_body: ${{ github.event.comment.body }}
     secrets: inherit
+
+  # ===========================================================================
+  # Deployment Safety: can-i-deploy + record-deployment (push to main only)
+  # ===========================================================================
+  can-i-deploy:
+    name: Can I Deploy?
+    needs: [verify-on-push]
+    if: always() && needs.verify-on-push.result == 'success'
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/can-i-deploy.yml@main
+    with:
+      pacticipant: pact-provider-demo
+      version: ${{ github.sha }}
+      environment: production
+    secrets: inherit
+
+  record-deployment:
+    name: Record Deployment
+    needs: [can-i-deploy]
+    if: needs.can-i-deploy.outputs.can_deploy == 'true'
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/record-deployment.yml@main
+    with:
+      pacticipant: pact-provider-demo
+      version: ${{ github.sha }}
+      environment: production
+    secrets: inherit
