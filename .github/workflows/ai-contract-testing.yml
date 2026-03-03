@@ -92,7 +92,7 @@ jobs:
     secrets: inherit
 
   # ===========================================================================
-  # Deployment Safety: can-i-deploy + record-deployment (push to main only)
+  # Deployment Safety: can-i-deploy + record-deployment (push to main)
   # ===========================================================================
   can-i-deploy:
     name: Can I Deploy?
@@ -109,6 +109,31 @@ jobs:
     name: Record Deployment
     needs: [can-i-deploy]
     if: needs.can-i-deploy.outputs.can_deploy == 'true'
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/record-deployment.yml@main
+    with:
+      pacticipant: pact-provider-demo
+      version: ${{ github.sha }}
+      environment: production
+    secrets: inherit
+
+  # ===========================================================================
+  # Deployment Safety: can-i-deploy + record-deployment (webhook)
+  # ===========================================================================
+  can-i-deploy-webhook:
+    name: Can I Deploy? (Webhook)
+    needs: [verify-on-webhook]
+    if: always() && needs.verify-on-webhook.result == 'success' && needs.verify-on-webhook.outputs.verification_passed == 'true'
+    uses: KalpitaG/ai-contract-testing-demo/.github/workflows/can-i-deploy.yml@main
+    with:
+      pacticipant: pact-provider-demo
+      version: ${{ github.sha }}
+      environment: production
+    secrets: inherit
+
+  record-deployment-webhook:
+    name: Record Deployment (Webhook)
+    needs: [can-i-deploy-webhook]
+    if: needs.can-i-deploy-webhook.outputs.can_deploy == 'true'
     uses: KalpitaG/ai-contract-testing-demo/.github/workflows/record-deployment.yml@main
     with:
       pacticipant: pact-provider-demo
