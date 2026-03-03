@@ -1,11 +1,13 @@
+// Breaking change introduced
+
 const express = require('express');
 const router = express.Router();
 
 // In-memory data store (simulates database)
 const items = [
-  { id: 1, name: 'Item One', price: 10.99, category: 'electronics', inStock: true },
-  { id: 2, name: 'Item Two', price: 24.99, category: 'clothing', inStock: true },
-  { id: 3, name: 'Item Three', price: 5.49, category: 'food', inStock: false }
+  { id: 1, name: 'Item One', cost: 10.99, category: 'electronics', inStock: true },
+  { id: 2, name: 'Item Two', cost: 24.99, category: 'clothing', inStock: true },
+  { id: 3, name: 'Item Three', cost: 5.49, category: 'food', inStock: false }
 ];
 
 // GET /items - List all items
@@ -65,7 +67,7 @@ router.post('/', (req, res) => {
   const newItem = {
     id: items.length + 1,
     name,
-    price,
+    cost: price,
     category: category || 'uncategorized',
     inStock: inStock !== undefined ? inStock : true
   };
@@ -89,7 +91,7 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ error: 'Name and price are required' });
   }
   
-  items[index] = { id, name, price, category, inStock };
+  items[index] = { id, name, cost: price, category, inStock };
   res.json(items[index]);
 });
 
