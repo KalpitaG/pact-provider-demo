@@ -72,6 +72,37 @@ describe('Provider Verification', () => {
         'user with ID 999 does not exist': () => {
           users.length = 0;
         },
+        'category 1 exists': () => {
+          categories.length = 0;
+          categories.push({ id: 1, name: 'Electronics', slug: 'electronics', itemCount: 0 });
+        },
+        'category 1 exists with items': () => {
+          categories.length = 0;
+          categories.push({ id: 1, name: 'Electronics', slug: 'electronics', itemCount: 1 });
+        },
+        'item 1 exists and can be deleted': () => {
+          items.length = 0;
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+        },
+        'item 1 exists and can be replaced': () => {
+          items.length = 0;
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+        },
+        'item 1 exists and can be updated': () => {
+          items.length = 0;
+          items.push({ id: 1, name: 'Widget', price: 9.99, category: 'Electronics', inStock: true });
+        },
+        'items exist in the inventory for a specific category and stock status': () => {
+          items.length = 0;
+          items.push({ id: 2, name: 'Gadget', price: 24.5, category: 'Electronics', inStock: true });
+        },
+        'user 1 exists with full profile': () => {
+          users.length = 0;
+          users.push({ id: 1, username: 'testuser', email: 'test@example.com', role: 'user' });
+        },
+        'user 999 does not exist': () => {
+          users.length = 0;
+        },
       },
     };
 
